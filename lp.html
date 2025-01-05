@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>موقع الإعلانات</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            direction: rtl;
+            font-family: 'Arial', sans-serif;
+        }
+        .navbar {
+            background-color: #007bff;
+        }
+        .navbar-brand, .nav-link {
+            color: #fff !important;
+        }
+        .ad-card {
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            padding: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .ad-card img {
+            max-width: 100%;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- شريط التنقل -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">موقع الإعلانات</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#loginModal">تسجيل الدخول / إنشاء حساب</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- الإعلانات -->
+    <div class="container my-4">
+        <h1 class="text-center">إعلانات عشوائية</h1>
+        <div class="row" id="adsContainer">
+            <!-- الإعلانات ستظهر هنا -->
+        </div>
+    </div>
+
+    <!-- نافذة تسجيل الدخول -->
+    <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="loginModalLabel">تسجيل الدخول أو إنشاء حساب</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">البريد الإلكتروني</label>
+                            <input type="email" class="form-control" id="email" placeholder="أدخل بريدك الإلكتروني">
+                        </div>
+                        <button type="button" class="btn btn-primary" id="proceedButton">متابعة</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- نافذة إضافة إعلان -->
+    <div class="modal fade" id="adModal" tabindex="-1" aria-labelledby="adModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="adModalLabel">إضافة إعلان جديد</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="adForm">
+                        <div class="mb-3">
+                            <label for="adImage" class="form-label">صورة الإعلان</label>
+                            <input type="file" class="form-control" id="adImage">
+                        </div>
+                        <div class="mb-3">
+                            <label for="adName" class="form-label">اسم المعلن</label>
+                            <input type="text" class="form-control" id="adName" placeholder="أدخل اسمك">
+                        </div>
+                        <div class="mb-3">
+                            <label for="adPhone" class="form-label">رقم المعلن</label>
+                            <input type="text" class="form-control" id="adPhone" placeholder="أدخل رقم هاتفك">
+                        </div>
+                        <div class="mb-3">
+                            <label for="adLocation" class="form-label">موقع المعلن</label>
+                            <input type="text" class="form-control" id="adLocation" placeholder="أدخل موقعك">
+                        </div>
+                        <div class="mb-3">
+                            <label for="adPrice" class="form-label">السعر</label>
+                            <input type="text" class="form-control" id="adPrice" placeholder="أدخل السعر">
+                        </div>
+                        <div class="mb-3">
+                            <label for="adDescription" class="form-label">وصف الإعلان</label>
+                            <textarea class="form-control" id="adDescription" rows="3" placeholder="أدخل وصف الإعلان"></textarea>
+                        </div>
+                        <button type="button" class="btn btn-success" id="addAdButton">إضافة الإعلان</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.getElementById('proceedButton').addEventListener('click', function() {
+            new bootstrap.Modal(document.getElementById('adModal')).show();
+        });
+
+        document.getElementById('addAdButton').addEventListener('click', function() {
+            const adImage = document.getElementById('adImage').files[0];
+            const adName = document.getElementById('adName').value;
+            const adPhone = document.getElementById('adPhone').value;
+            const adLocation = document.getElementById('adLocation').value;
+            const adPrice = document.getElementById('adPrice').value;
+            const adDescription = document.getElementById('adDescription').value;
+
+            if (adName && adPhone && adLocation && adPrice && adDescription) {
+                const reader = new FileReader();
+
+                reader.onload = function(e) {
+                    const adsContainer = document.getElementById('adsContainer');
+                    const adCard = document.createElement('div');
+                    adCard.className = 'col-md-4';
+                    adCard.innerHTML = `
+                        <div class="ad-card">
+                            <img src="${e.target.result}" alt="صورة الإعلان">
+                            <h5 class="mt-3">اسم المعلن: ${adName}</h5>
+                            <p>رقم المعلن: ${adPhone}</p>
+                            <p>موقع المعلن: ${adLocation}</p>
+                            <p>السعر: ${adPrice} ريال</p>
+                            <p>وصف الإعلان: ${adDescription}</p>
+                        </div>
+                    `;
+                    adsContainer.appendChild(adCard);
+                };
+
+                if (adImage) {
+                    reader.readAsDataURL(adImage);
+                } else {
+                    alert('يرجى اختيار صورة للإعلان');
+                }
+
+                // إغلاق النافذة
+                const adModal = bootstrap.Modal.getInstance(document.getElementById('adModal'));
+                adModal.hide();
+            } else {
+                alert('يرجى ملء جميع الحقول');
+            }
+        });
+    </script>
+</body>
+</html>
